@@ -22,6 +22,7 @@ public class Debouncer
         new Timer((_) =>
         {
             var doAction = false;
+            // Not sure if this lock is needed.
             lock (this)
             {
                 if (counter == thisCount)

@@ -6,6 +6,7 @@ public interface IMediator
     void Register(object compoment);
 }
 
+// PageMediator act like a container component in react
 public class PageMediator : IMediator
 {
     private Document? document;
@@ -15,6 +16,7 @@ public class PageMediator : IMediator
     public void Notify(object input)
     {
         GuardReady();
+        // in MediatR, each if condition is a pattern matching with a specific handler
         if (input is Document.OccurenceFoundCount search)
         {
             foundCount.FoundCountValue = search.count;
@@ -25,6 +27,7 @@ public class PageMediator : IMediator
         }
     }
 
+    // Mediator have to know which component to interact with
     public void Register(object compoment)
     {
         var typeOfComponent = compoment.GetType();
