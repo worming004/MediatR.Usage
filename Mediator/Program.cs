@@ -2,11 +2,12 @@
 
 var pageMediator = new PageMediator();
 var document = new Document("Hello Joe, how are you Joe?", pageMediator);
-var textArea = new TextArea(pageMediator);
-var foundCount = new FoundCount(pageMediator);
+var textInput = new TextInput(pageMediator);
+var foundCount = new CounterDisplay(pageMediator);
 
-textArea.Text = "Joe";
+// This trigger a real search in document after 100ms. Orchestrated by PageMediator.
+textInput.Text = "Joe";
 // Wait for the debouncer to finish
 await Task.Delay(150);
-System.Console.WriteLine(foundCount.FoundCountValue);
+System.Console.WriteLine(foundCount.CounterValue);
 

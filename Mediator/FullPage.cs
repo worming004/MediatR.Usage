@@ -10,8 +10,8 @@ public interface IMediator
 public class PageMediator : IMediator
 {
     private Document? document;
-    private TextArea? textArea;
-    private FoundCount? foundCount;
+    private TextInput? textArea;
+    private CounterDisplay? foundCount;
     private Debouncer debouncerForTextArea = new Debouncer(100);
     public void Notify(object input)
     {
@@ -19,9 +19,9 @@ public class PageMediator : IMediator
         // in MediatR, each if condition is a pattern matching with a specific handler
         if (input is Document.OccurenceFoundCount search)
         {
-            foundCount.FoundCountValue = search.count;
+            foundCount.CounterValue = search.count;
         }
-        else if (input is TextArea.TextAreaChanged text)
+        else if (input is TextInput.TextInputChanged text)
         {
             debouncerForTextArea.Debounce(() => document.FindOccurence(text.text));
         }
@@ -35,13 +35,13 @@ public class PageMediator : IMediator
         {
             document = (Document)compoment;
         }
-        else if (typeOfComponent == typeof(TextArea))
+        else if (typeOfComponent == typeof(TextInput))
         {
-            textArea = (TextArea)compoment;
+            textArea = (TextInput)compoment;
         }
-        else if (typeOfComponent == typeof(FoundCount))
+        else if (typeOfComponent == typeof(CounterDisplay))
         {
-            foundCount = (FoundCount)compoment;
+            foundCount = (CounterDisplay)compoment;
         }
         else
         {
@@ -59,6 +59,7 @@ public class PageMediator : IMediator
 
 }
 
+// Document becomes usable in tons of cases as there is no understanding of context.
 public class Document
 {
     public record OccurenceFoundCount(int count);
@@ -79,13 +80,14 @@ public class Document
     }
 }
 
-public class TextArea
+// TextArea becomes usable in tons of cases as there is no understanding of context.
+public class TextInput
 {
-    public record TextAreaChanged(string text);
+    public record TextInputChanged(string text);
     private string text;
     private IMediator mediator;
 
-    public TextArea(IMediator mediator)
+    public TextInput(IMediator mediator)
     {
         this.mediator = mediator;
         mediator.Register(this);
@@ -96,15 +98,16 @@ public class TextArea
         get => text; set
         {
             text = value;
-            mediator.Notify(new TextAreaChanged(text));
+            mediator.Notify(new TextInputChanged(text));
         }
     }
 }
 
-public class FoundCount
+// CounterDisplay becomes usable in tons of cases as there is no understanding of context.
+public class CounterDisplay
 {
-    public int FoundCountValue { get; set; }
-    public FoundCount(IMediator mediator)
+    public int CounterValue { get; set; }
+    public CounterDisplay(IMediator mediator)
     {
         mediator.Register(this);
     }
