@@ -16,7 +16,7 @@ public class PageMediator : IMediator
     public void Notify(object input)
     {
         GuardReady();
-        // in MediatR, each if condition is a pattern matching with a specific handler
+        // in MediatR, each command or event match with a handler. This is replicated here with if conditions.
         if (input is Document.OccurenceFoundCount search)
         {
             foundCount.CounterValue = search.count;
