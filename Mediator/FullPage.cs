@@ -1,10 +1,5 @@
 namespace Mediator;
 
-public interface IMediator
-{
-    void Notify(object input);
-    void Register(object compoment);
-}
 
 // PageMediator act like a container component in react
 public class PageMediator : IMediator
@@ -59,56 +54,5 @@ public class PageMediator : IMediator
 
 }
 
-// Document becomes usable in tons of cases as there is no understanding of context.
-public class Document
-{
-    public record OccurenceFoundCount(int count);
-    private string text;
-    private IMediator mediator;
 
-    public Document(string texte, IMediator mediator)
-    {
-        this.text = texte;
-        this.mediator = mediator;
-        mediator.Register(this);
-    }
 
-    public void FindOccurence(string search)
-    {
-        var count = text.Split(search).Length - 1;
-        mediator.Notify(new OccurenceFoundCount(count = count));
-    }
-}
-
-// TextArea becomes usable in tons of cases as there is no understanding of context.
-public class TextInput
-{
-    public record TextInputChanged(string text);
-    private string text;
-    private IMediator mediator;
-
-    public TextInput(IMediator mediator)
-    {
-        this.mediator = mediator;
-        mediator.Register(this);
-    }
-
-    public string Text
-    {
-        get => text; set
-        {
-            text = value;
-            mediator.Notify(new TextInputChanged(text));
-        }
-    }
-}
-
-// CounterDisplay becomes usable in tons of cases as there is no understanding of context.
-public class CounterDisplay
-{
-    public int CounterValue { get; set; }
-    public CounterDisplay(IMediator mediator)
-    {
-        mediator.Register(this);
-    }
-}
